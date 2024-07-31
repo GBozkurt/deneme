@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Deneme</title>
+</head>
+
+<body>
+  <div class="container" style="padding-left: 40px; padding-right: 50px; padding-top: 20px; ">
+    <div style="text-align: center;">
+    <select class="form-select" aria-label="Default select example"
+      style="width: 300px;margin-bottom: 30px;display: inline-block;" [(ngModel)]="filtreleSecili">
+      <option value="filtrele">Filtrele..</option>
+      <option value="id">İd</option>
+      <option value="il">İl</option>
+      <option value="ilce">İlçe</option>
+      <option value="mahalle">Mahalle</option>
+      <option value="ada">Ada</option>
+      <option value="parsel">Parsel</option>
+      <option value="nitelik">Nitelik</option>
+      <option value="koordinatbilgileri">Adres</option>
+    </select>
+    <input type="text" placeholder="Değer.." [(ngModel)]="filtreleDeger" class="form-control" style="width: 300px;margin-bottom: 30px;margin-left: 20px;display: inline-block;">
+    <button class="btn btn-dark" style="margin-left: 20px;" (click)="filtrele()">Ara..</button>
+    <button class="icon-button" style="margin-left: 20px;" (click)="get()"><i class="fas fa-sync-alt fa-m" ></i></button></div>
+    
+    <table class="table table-bordered  table-sm">
+      <thead>
+        <tr class="table-dark">
+          <td></td>
+          <th scope="col">Id</th>
+          <th scope="col">İl</th>
+          <th scope="col">İlçe</th>
+          <th scope="col">Mahalle</th>
+          <th scope="col">Ada</th>
+          <th scope="col">Parsel</th>
+          <th scope="col">Nitelik</th>
+          <th scope="col">Adres</th>
+
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of paginatedTasinmazlar">
+          <td><input type="checkbox" value="item.id" (change)="onCheckboxChange($event, item.id)"></td>
+          <th scope="row">{{item.id}}</th>
+          <td>{{item.mahalle.ilce.il.ilAdi}}</td>
+          <td>{{item.mahalle.ilce.ilceAdi}}</td>
+          <td>{{item.mahalle.mahalleAdi}}</td>
+          <td>{{item.ada}}</td>
+          <td>{{item.parsel}}</td>
+          <td>{{item.nitelik}}</td>
+          <td>{{item.koordinatBilgileri}}</td>
+
+        </tr>
+
+        <tr *ngFor="let item of listMaker">
+          <th></th>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td style="color: rgb(255, 255, 255);">boş</td>
+        </tr>
+
+      </tbody>
+    </table>
+    <div class="text-center pb-2 mt-4">
+      <button class="icon-button" (click)="ekle()"><i class="fas fa-plus-circle fa-3x white-icon"></i></button>
+      <button class="icon-button" (click)="duzenle()"><i class="fas fa-edit fa-3x white-icon"
+          style="margin-left: 80px;"></i></button>
+      <button class="icon-button" (click)="deleteSelected()"><i class="fas fa-trash fa-3x white-icon"
+          style="margin-left: 80px;"></i></button>
+      <button class="icon-button" (click)="exportToCSV()"><i class="fas fa-print fa-3x white-icon"
+          style="margin-left: 80px;"></i></button>
+    </div>
+    <div class="text-center mt-3">
+      <button class="btn btn-outline-secondary btn-sm  m-1" (click)="previousPage()">Önceki</button>
+      <button class="btn btn-outline-dark btn-sm" (click)="nextPage()">Sonraki</button>
+    </div>
+  </div>
+</body>
+
+</html>

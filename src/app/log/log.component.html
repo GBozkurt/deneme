@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deneme</title>
+</head>
+<body>
+  <div class="container" style=" padding-top: 20px;" >
+    <div style="text-align: center;">
+      <select class="form-select" aria-label="Default select example"
+        style="width: 300px;margin-bottom: 30px;display: inline-block;" [(ngModel)]="filtreleSecili">
+        <option value="filtrele">Filtrele..</option>
+        <option value="id">İd</option>
+        <option value="kullaniciid">Kullanıcı Id</option>
+        <option value="durum">Durum</option>
+        <option value="islem">İşlem</option>
+        <option value="aciklama">Açıklama</option>
+        <option value="tarih">Tarih(Yıl-Ay-Gün)</option>
+        <option value="kullaniciip">Kullanıcı Ip</option>
+      </select>
+      <input type="text" placeholder="Değer.." [(ngModel)]="filtreleDeger" class="form-control" style="width: 300px;margin-bottom: 30px;margin-left: 20px;display: inline-block;">
+      <button class="btn btn-dark" style="margin-left: 20px;" (click)="filtrele()">Ara..</button>
+      <button class="icon-button" style="margin-left: 20px;" (click)="getLogs()"><i class="fas fa-sync-alt fa-m" ></i></button></div>
+          <table class="table table-bordered  ">
+              <thead>
+                <tr class="table-dark">
+                  <th></th>
+                  <th scope="col">Id</th>
+                  <th scope="col">Kullanıcı Id</th>
+                  <th scope="col">Durum</th>
+                  <th scope="col">İşlem</th>
+                  <th scope="col" class="fixed-width">Açıklama</th>
+                  <th scope="col">Tarih</th>
+                  <th scope="col">Kullanıcı Ip</th>
+                  
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of paginatedKullanicilar">
+                  <td><input type="checkbox" value="item.id" (change)="onCheckboxChange($event, item.id)"></td>
+                  <th scope="row">{{item.id}}</th>
+                  <td>{{item.userId}}</td>
+                  <td>{{item.durum}}</td>
+                  <td>{{item.islemTip}}</td>
+                  <td class="fixed-width">{{item.aciklama}}</td>
+                  <td>{{item.tarihSaat}}</td>
+                  <td>{{item.kullaniciIp}}</td>
+                 
+                </tr>
+                
+                  <tr *ngFor="let item of listMaker">
+                    <th></th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td style="color: rgb(255, 255, 255);">boş</td>
+                  </tr>
+              </tbody>
+            </table>
+            <div class="text-center pb-2 mt-4">
+             
+              
+              <button class="icon-button" (click)="deleteSelected()"><i class="fas fa-trash fa-3x white-icon"
+                  ></i></button>
+              <button class="icon-button" (click)="exportToCSV()"><i class="fas fa-print fa-3x white-icon"
+                  style="margin-left: 80px;"></i></button>
+            </div>
+          
+            <div class="text-center">
+              <button class="btn btn-outline-secondary btn-sm  m-1" (click)="previousPage()">Önceki</button>
+              <button class="btn btn-outline-dark btn-sm" (click)="nextPage()">Sonraki</button>
+            </div>
+      </div>
+</body>
+</html>
