@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="tr">
 
 <head>
   <meta charset="UTF-8">
@@ -37,7 +37,7 @@
           <th scope="col">Ada</th>
           <th scope="col">Parsel</th>
           <th scope="col">Nitelik</th>
-          <th scope="col">Adres</th>
+          <th scope="col">Koordinat</th>
 
         </tr>
       </thead>
@@ -56,7 +56,7 @@
         </tr>
 
         <tr *ngFor="let item of listMaker">
-          <th></th>
+          <th scope="row"></th>
           <td></td>
           <td></td>
           <td></td>
@@ -70,12 +70,12 @@
       </tbody>
     </table>
     <div class="text-center pb-2 mt-4">
-      <button class="icon-button" (click)="ekle()"><i class="fas fa-plus-circle fa-3x white-icon"></i></button>
-      <button class="icon-button" (click)="duzenle()"><i class="fas fa-edit fa-3x white-icon"
+      <button class="icon-button" (click)="ekle()"><i class="fas fa-plus-circle fa-3x" ></i></button>
+      <button class="icon-button" (click)="duzenle()"><i class="fas fa-edit fa-3x"
           style="margin-left: 80px;"></i></button>
-      <button class="icon-button" (click)="deleteSelected()"><i class="fas fa-trash fa-3x white-icon"
+      <button class="icon-button" (click)="deleteSelected()"><i class="fas fa-trash fa-3x"
           style="margin-left: 80px;"></i></button>
-      <button class="icon-button" (click)="exportToCSV()"><i class="fas fa-print fa-3x white-icon"
+      <button class="icon-button" (click)="exportToCSV()"><i class="fas fa-print fa-3x"
           style="margin-left: 80px;"></i></button>
     </div>
     <div class="text-center mt-3">

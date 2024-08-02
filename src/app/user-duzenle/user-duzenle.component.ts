@@ -4,7 +4,7 @@ import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from
 import { registerUser } from '../models/registerUser';
 import { Log } from '../models/log';
 import { LogService } from '../services/log.service';
-
+import * as alertify from 'alertifyjs';
 @Component({
   selector: 'app-user-duzenle',
   templateUrl: './user-duzenle.component.html',
@@ -36,6 +36,7 @@ export class UserDuzenleComponent implements OnInit {
     }
   }
 
+  //KULLANICIYI ALIP FORMA GİRME
   getUserById(id:number){
     this.userService.getUserById(id).subscribe((item)=>{
       this.myForm.patchValue({
@@ -48,6 +49,7 @@ export class UserDuzenleComponent implements OnInit {
     });
   }
 
+  //PAROLA KONTROLÜ
   passwordValidator(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {
       const value = control.value;
@@ -65,9 +67,10 @@ export class UserDuzenleComponent implements OnInit {
     };
   }
   
+  //ROL KONTROLÜ
   checkRole(){
-    var id  = this.userService.getCurrentUser();
-    var a = "admin";
+    const id  = this.userService.getCurrentUser();
+    const a = "admin";
     this.userService.getUserRole(id).subscribe((response: string)=>{
      
       if(response != a){
@@ -76,6 +79,7 @@ export class UserDuzenleComponent implements OnInit {
     },e=>{console.log("Hata",e)});
   }
 
+  //VERİYİ BACKENDE GÖNDER
   onSubmit(){
     if(this.myForm.valid){
       const secim = window.confirm('Seçili taşınmazı güncellemek istediğinize emin misiniz?');
@@ -84,22 +88,23 @@ export class UserDuzenleComponent implements OnInit {
         this.deger = new registerUser(formData.name,formData.username,formData.password,formData.rol);
         console.log(this.deger);
         this.userService.PutUpdateUser(this.deger,this.id).subscribe(s=>{
-          var id = this.userService.getCurrentUser(); 
-          var islem = "User-Update";
-          var aciklama = "Update işlemi yapılmıştır. Eski Kullanıcı: "+ JSON.stringify(this.deger);
-          var durum = "Başarılı!";
-          var ip;
+          const id = this.userService.getCurrentUser(); 
+          const islem = "User-Update";
+          const aciklama = "Update işlemi yapılmıştır. Eski Kullanıcı: "+ JSON.stringify(this.deger);
+          const durum = "Başarılı!";
+          
           this.userService.getUserIp().subscribe((data: string)=>{
-            ip = data;
+            const ip = data;
             this.log = new Log(Number(id),durum,islem,aciklama,ip);
             this.logService.PostLog(this.log).subscribe(s=>{});
             this.userService.router.navigate(['/admin']);
+            alertify.notify('Düzenleme Başarılı!', 'success', 3, function(){  console.log('dismissed'); });
         });
         })
       }
     }
     else{
-      alert("Bilgileri doğru giriniz!");
+      alertify.notify('Düzenleme Başarısız!', 'error', 3, function(){  console.log('dismissed'); });
     }
   }
 }

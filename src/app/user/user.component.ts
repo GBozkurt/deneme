@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
 import { UserService } from '../services/user.service';
 import { LogService } from '../services/log.service';
 import { Log } from '../models/log';
-
+import * as alertify from 'alertifyjs';
 @Component({
   selector: 'app-user',
   templateUrl: './user.component.html',
@@ -19,8 +19,9 @@ export class UserComponent implements OnInit {
   list:number[] = []; 
   log:Log;
   selectedIds: number[] = [];
-  data: any[];  
-  constructor(private formBuilder: FormBuilder,private userService:UserService,private logService:LogService) { }
+  data: any[]; 
+  id: number; 
+  constructor(private userService:UserService,private logService:LogService) { }
  
   ngOnInit() {
     if((this.userService.loggedIn())){
@@ -28,11 +29,13 @@ export class UserComponent implements OnInit {
     }
     this.checkRole();
     this.get();
+    this. id =this.userService.getCurrentUser();
   }
 
+  //ROL KONTROLÜ
   checkRole(){
-    var id  = this.userService.getCurrentUser();
-    var a = "admin";
+    const id  = this.userService.getCurrentUser();
+    const a = "admin";
     this.userService.getUserRole(id).subscribe((response: string)=>{
      
       if(response != a){
@@ -41,14 +44,17 @@ export class UserComponent implements OnInit {
     },e=>{console.log("Hata",e)});
   }
 
+  //KULLANICILARI GETİR
   get(){
-    this.userService.getAllUsers().subscribe(s=>{this.kullanicilar = s;this.control();this.filtreleDeger=null;
+    this.userService.getAllUsers().subscribe(s=>{
+      this.kullanicilar = s;
+      this.control();this.filtreleDeger=null;
       this.filtreleSecili="filtrele";},e=>{
-      var id = this.userService.getCurrentUser();
-      var islem = "Kullanıcıları Listeleme";
-      var aciklama = "Kullanıcıları getitirken bir hata oluştu!: "+e;
-      var durum = "Başarılı!";
-      var ip;
+        const id = this.userService.getCurrentUser();
+        const islem = "Kullanıcıları Listeleme";
+        const aciklama = "Kullanıcıları getitirken bir hata oluştu!: "+e;
+        const durum = "Başarılı!";
+        let ip;
       this.userService.getUserIp().subscribe(s=>{ip =s;});
       this.log = new Log(id,durum,islem,aciklama,ip)
       this.logService.PostLog(this.log);
@@ -57,26 +63,19 @@ export class UserComponent implements OnInit {
     })
   }
 
+  //KULLANICILARI LİSTELE
   get paginatedKullanicilar() {
     const start = (this.page - 1) * this.pageSize;
     return this.kullanicilar.slice(start, start + this.pageSize);
   }
 
+  //BOŞ SATIRLARI KONTROL ET
   control(){
     const totalPages = Math.ceil(this.kullanicilar.length / this.pageSize);
     if(this.page==totalPages){
       this.bos = this.pageSize-this.kullanicilar.length;
     } 
   }
-
-  previousPage() {
-    if (this.page > 1) {
-      this.page--;
-      this.bos = 0;
-      
-    }
-  }
-
   get listMaker(){
     this.list = [];
     for(let i=0;i<this.bos;i++){
@@ -85,6 +84,16 @@ export class UserComponent implements OnInit {
     return this.list;
   }
 
+  //ÖNCEKİ SAYFA
+  previousPage() {
+    if (this.page > 1) {
+      this.page--;
+      this.bos = 0;
+      
+    }
+  }
+
+  //SONRAKİ SAYFA
   nextPage() {
     const totalPages = Math.ceil(this.kullanicilar.length / this.pageSize);
     if (this.page < totalPages) {
@@ -99,6 +108,7 @@ export class UserComponent implements OnInit {
     }
   }
 
+  //CHECKBOXA GÖRE İD ALMA
   onCheckboxChange(event: any, id: number) {
     if (event.target.checked) {
       this.selectedIds.push(id);
@@ -110,10 +120,12 @@ export class UserComponent implements OnInit {
     }
   }
 
+  //KULLANICI EKLEME
   ekle(){
     this.userService.router.navigateByUrl("/kayit");
   }
 
+  //SEÇİLEN KULLANICILARI DELETE'E GÖNDERME
   deleteSelected(){
     const secim = window.confirm('Seçili taşınmazları silmek istediğinize emin misiniz?');
     if (secim){
@@ -121,39 +133,43 @@ export class UserComponent implements OnInit {
         this.delete(element);
         
       });
-      location.reload();
+      
       this.selectedIds = [];
     }   
   }
 
+  //KULLANICI SİLME
   delete(id:number){
-    this.userService.DeleteUSer(id).subscribe(s=>{
-      var id = this.userService.getCurrentUser();
-      var islem = "Kullanıcı Silme";
-      var aciklama = "Kullanıcı başarıyla silindi: "+JSON.stringify(s);
-      var durum = "Başarılı!";
-      var ip;
+    this.userService.DeleteUser(id).subscribe(s=>{
+      const id = this.userService.getCurrentUser();
+      const islem = "Kullanıcı Silme";
+      const aciklama = "Kullanıcı başarıyla silindi: "+JSON.stringify(s);
+      const durum = "Başarılı!";
+      
       this.userService.getUserIp().subscribe((data: string)=>{
-        ip = data;
+      const ip = data;
         this.log = new Log(Number(id),durum,islem,aciklama,ip);
         console.log("aa");
         this.logService.PostLog(this.log).subscribe(s=>{});
-        location.reload();
+        this.get();
+        alertify.notify('Silme Başarılı!', 'success', 3, function(){  console.log('dismissed'); });
       });
       },e=>{
-        var id = this.userService.getCurrentUser();
-        var islem = "Kullanıcı Silme";
-        var aciklama = "Kullanıcı silerken hata!: "+e;
-        var durum = "Başarısız!";
-        var ip;
+        const id = this.userService.getCurrentUser();
+        const islem = "Kullanıcı Silme";
+        const aciklama = "Kullanıcı silerken hata!: "+e;
+        const durum = "Başarısız!";
+        
         this.userService.getUserIp().subscribe((data: string)=>{
-          ip =data;
+          const ip =data;
           this.log = new Log(Number(id),durum,islem,aciklama,ip)
           this.logService.PostLog(this.log).subscribe(s=>{});
+          alertify.notify('Silme Başarısız!', 'error', 3, function(){  console.log('dismissed'); });
         });
       })
   }
  
+  //KULLANICI RAPORLA
   exportToCSV(): void {
     if(this.selectedIds.length ==1){
       this.userService.getUserById(this.selectedIds[0]).subscribe(s=>
@@ -175,18 +191,19 @@ export class UserComponent implements OnInit {
         link.click();
         document.body.removeChild(link);
       }
+      alertify.notify('Raporlama Başarılı!', 'success', 3, function(){  console.log('dismissed'); });
       }
       );
     }
     else{
-      alert("Lütfen sadece bir seçim yapınız!");
+      
+      alertify.notify('Bir Seçim Yapınız!', 'error', 3, function(){  console.log('dismissed'); });
     }
     
   }
 
+  //KULLANICILARI FİLTRELEME
   filtrele(){
-    
-    
     if(this.filtreleSecili == "id"){
       this.userService.getUserById(Number(this.filtreleDeger)).subscribe(s=>{
        
@@ -195,14 +212,16 @@ export class UserComponent implements OnInit {
       });
     }
     else if(this.filtreleSecili == "filtrele"){
+      return null;
     }
     else{
        this.userService.getUsersByString(this.filtreleSecili,this.filtreleDeger).subscribe(s=>{
          this.kullanicilar=s;this.control();
        })
      }
-    
   }
+
+  //KULLANICI DÜZENLE
   duzenle(){
     const id = localStorage.getItem('userId');
     if (id) {
@@ -214,8 +233,6 @@ export class UserComponent implements OnInit {
     }
     else{
       alert("Lütfen sadece bir seçim yapınız!");
-    }
-    
+    } 
   }
-
 }

@@ -11,35 +11,33 @@ import { LogService } from '../services/log.service';
 })
 export class NavComponent implements OnInit {
   isAuthenticated: boolean;
-  role:boolean;
-  log:Log;
-  constructor(private userService:UserService,private logService:LogService) { }
+  role: boolean;
+  log: Log;
+  constructor(private userService: UserService, private logService: LogService) { }
 
   ngOnInit() {
     this.userService.authStatus$.subscribe(status => {
       this.isAuthenticated = status;
-     
-    });
-    
-    //this.userService.checkRole();
 
-    this.userService.role$.subscribe(status=>{
+    });
+    this.userService.role$.subscribe(status => {
       this.role = status;
-    
+
     });
   }
 
-  cikis(){
+  //ÇIKIŞ İŞLEMİ
+  cikis() {
     const secim = window.confirm('Çıkış yapmak istediğinize emin misiniz?');
-    if(secim){
-      var id = this.userService.getCurrentUser();
-      var islem = "Exit";
-      var aciklama = "Exit işlemi Yapılmıştır";
-      var durum = "Başarılı!";
-      this.userService.getUserIp().subscribe((data: string)=>{
-        var ip = data;
-        this.log = new Log(Number(id),durum,islem,aciklama,ip);
-        this.logService.PostLog(this.log).subscribe(s=>{});
+    if (secim) {
+      const id = this.userService.getCurrentUser();
+      const islem = "Exit";
+      const aciklama = "Exit işlemi Yapılmıştır";
+      const durum = "Başarılı!";
+      this.userService.getUserIp().subscribe((data: string) => {
+        const ip = data;
+        this.log = new Log(Number(id), durum, islem, aciklama, ip);
+        this.logService.PostLog(this.log).subscribe(s => { });
         this.userService.router.navigateByUrl('/deneme');
         this.userService.clearToken();
         this.role = false;

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -25,7 +25,7 @@
           <table class="table table-bordered  ">
               <thead>
                 <tr class="table-dark">
-                  <th></th>
+                  <th scope="col"></th>
                   <th scope="col">Id</th>
                   <th scope="col">Kullanıcı Id</th>
                   <th scope="col">Durum</th>
@@ -50,7 +50,7 @@
                 </tr>
                 
                   <tr *ngFor="let item of listMaker">
-                    <th></th>
+                    <th scope="row"></th>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -64,10 +64,9 @@
             <div class="text-center pb-2 mt-4">
              
               
-              <button class="icon-button" (click)="deleteSelected()"><i class="fas fa-trash fa-3x white-icon"
-                  ></i></button>
+              
               <button class="icon-button" (click)="exportToCSV()"><i class="fas fa-print fa-3x white-icon"
-                  style="margin-left: 80px;"></i></button>
+                  ></i></button>
             </div>
           
             <div class="text-center">

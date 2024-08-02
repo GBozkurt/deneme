@@ -1,4 +1,4 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import Map from 'ol/Map';
 import View from 'ol/View';
 import TileLayer from 'ol/layer/Tile';
@@ -17,39 +17,39 @@ export class MapEkleComponent implements OnInit {
   map: Map;
   osmLayer: TileLayer;
   googleLayer: TileLayer;
- 
-  constructor(private userService: UserService,private denemeService:DenemeService) { }
+
+  constructor(private userService: UserService, private denemeService: DenemeService) { }
 
   ngOnInit(): void {
-    if(this.userService.loggedIn()){
+    if (this.userService.loggedIn()) {
       this.userService.router.navigateByUrl('/giris');
     }
     this.userService.checkRole();
-    
+
     this.osmLayer = new TileLayer({
       source: new OSM(),
       visible: true,
       opacity: 1
     });
 
- 
+
     this.googleLayer = new TileLayer({
       source: new XYZ({
-        url: 'https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', 
+        url: 'https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
         maxZoom: 21
       }),
       visible: true,
-      opacity: 1 
+      opacity: 1
     });
 
 
   }
 
- 
+
 
   ngAfterViewInit(): void {
-    
-   
+
+
     this.map = new Map({
       target: 'map',
       layers: [this.osmLayer, this.googleLayer],
@@ -68,18 +68,18 @@ export class MapEkleComponent implements OnInit {
       localStorage.setItem('selectedCoordinates', coordinatesString);
       window.location.href = '/ekle';
     });
-  
-
-  
 
 
-  
+
+
+
+
     const osmOpacityInput = document.getElementById('osm-opacity') as HTMLInputElement;
     osmOpacityInput.addEventListener('input', (event: any) => {
       this.setOsmOpacity(parseFloat(event.target.value));
     });
 
-   
+
     const googleOpacityInput = document.getElementById('google-opacity') as HTMLInputElement;
     googleOpacityInput.addEventListener('input', (event: any) => {
       this.setGoogleOpacity(parseFloat(event.target.value));

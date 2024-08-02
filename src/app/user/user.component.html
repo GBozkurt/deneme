@@ -33,7 +33,8 @@
         </thead>
         <tbody>
           <tr *ngFor="let item of paginatedKullanicilar">
-            <td><input type="checkbox" value="item.id" (change)="onCheckboxChange($event, item.id)"></td>
+            <td *ngIf="this.id ==item.id"></td>
+            <td *ngIf="this.id !=item.id"><input type="checkbox" value="item.id" (change)="onCheckboxChange($event, item.id)"></td>
             <th scope="row">{{item.id}}</th>
             <td>{{item.name}}</td>
             <td>{{item.email}}</td>
@@ -41,7 +42,7 @@
           </tr>
           
             <tr *ngFor="let item of listMaker">
-              <th></th>
+              <th scope="row"></th>
               <td></td>
               <td></td>
               <td></td>

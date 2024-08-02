@@ -5,27 +5,27 @@ import { Tasinmaz } from '../models/tasinmaz';
 import { UserService } from '../services/user.service';
 import { LogService } from '../services/log.service';
 import { Log } from '../models/log';
-
+import * as alertify from 'alertifyjs';
 @Component({
   selector: 'app-ekle',
   templateUrl: './ekle.component.html',
   styleUrls: ['./ekle.component.css']
 })
 export class EkleComponent implements OnInit {
-  il:any;
-  ilce:any;
-  mahalle:any;
-  selectedIlId:number;
-  selectedIlceId:number;
-  selectedMahalleId:number;
+  il: any;
+  ilce: any;
+  mahalle: any;
+  selectedIlId: number;
+  selectedIlceId: number;
+  selectedMahalleId: number;
   deger: Tasinmaz;
   myForm: FormGroup;
   coordinates: string | null = null;
-  log:Log;
-  constructor( private formBuilder: FormBuilder,private denemeService:DenemeService,private userService:UserService, private logService:LogService) { }
+  log: Log;
+  constructor(private formBuilder: FormBuilder, private denemeService: DenemeService, private userService: UserService, private logService: LogService) { }
 
   ngOnInit() {
-    if(this.userService.loggedIn()){
+    if (this.userService.loggedIn()) {
       this.userService.router.navigateByUrl('/giris');
     }
     this.userService.checkRole();
@@ -43,80 +43,83 @@ export class EkleComponent implements OnInit {
       koordinatBilgileri: ['', Validators.required],
       ilSelect: ['', Validators.required],
       ilceSelect: ['', Validators.required],
-      
+
     });
   }
-  
-  onIlChange(){
-    if(this.selectedIlId){
+
+  //İL DEĞİŞİNCE İLİ ÇAĞIR
+  onIlChange() {
+    if (this.selectedIlId) {
       this.getIlceByIl(this.selectedIlId);
       this.selectedIlceId = null;
     }
-    else{
+    else {
       this.ilce = null;
     }
   }
-  
-  onIlceChange(){
-    if(this.selectedIlceId){
+
+  //İLÇE DEĞİŞİNCE MAHALLEYİ ÇAĞIR
+  onIlceChange() {
+    if (this.selectedIlceId) {
       this.getMahalleByIlce(this.selectedIlceId);
     }
-    else{
+    else {
       this.mahalle = null;
     }
   }
 
-  getIl(){
-    this.denemeService.GetAllIl().subscribe(s=>{this.il=s},e=>{} );
+  //İL, İLÇE, MAHALLEYİ ÇAĞIR
+  getIl() {
+    this.denemeService.GetAllIl().subscribe(s => { this.il = s }, e => { });
   }
-  
-  getIlceByIl(il:number){
-    this.denemeService.GetAllIlce(il).subscribe(s=>{this.ilce=s},e=>{} );
+  getIlceByIl(il: number) {
+    this.denemeService.GetAllIlce(il).subscribe(s => { this.ilce = s }, e => { });
   }
-  
-  getMahalleByIlce(ilce:number){
-    this.denemeService.GetAllMahalle(ilce).subscribe(s=>{this.mahalle=s},e=>{} );
+  getMahalleByIlce(ilce: number) {
+    this.denemeService.GetAllMahalle(ilce).subscribe(s => { this.mahalle = s }, e => { });
   }
 
+  //FORMDAKİ VERİYİ DÖNÜŞTÜR
   onSubmit() {
-    if(this.myForm.valid){
+    if (this.myForm.valid) {
       const id = this.userService.getCurrentUser();
       const formData = this.myForm.value;
-      this.deger = new Tasinmaz(parseInt(formData.mahalleId,10),formData.ada,formData.parsel,formData.nitelik,formData.koordinatBilgileri,Number(id));
+      this.deger = new Tasinmaz(parseInt(formData.mahalleId, 10), formData.ada, formData.parsel, formData.nitelik, formData.koordinatBilgileri, Number(id));
       this.postFormData(this.deger);
     }
-    }
-  
-  
+  }
 
-
-  postFormData(tasinmaz:Tasinmaz){
+  //FORMDAKİ VERİYİ BACKENDE GÖNDER
+  postFormData(tasinmaz: Tasinmaz) {
     const secim = window.confirm('Yeni taşınmazı eklemek istediğinize emin misiniz?');
-    if (secim){
-      this.denemeService.PostAddTasinmaz(tasinmaz).subscribe(s=>{
-        var id = this.userService.getCurrentUser(); 
-        var islem = "Add";
-        var aciklama = "Add işlemi yapılmıştır. Eklenen Taşınmaz: "+ JSON.stringify(tasinmaz);
-        var durum = "Başarılı!";
-        var ip;
-        this.userService.getUserIp().subscribe((data: string)=>{
-          ip = data;
-          this.log = new Log(Number(id),durum,islem,aciklama,ip);
-          this.logService.PostLog(this.log).subscribe(s=>{});
+    if (secim) {
+      this.denemeService.PostAddTasinmaz(tasinmaz).subscribe(s => {
+        const id = this.userService.getCurrentUser();
+        const islem = "Taşınmaz Ekle";
+        const aciklama = "Taşınmaz ekle işlemi yapılmıştır. Eklenen Taşınmaz: " + JSON.stringify(tasinmaz);
+        const durum = "Başarılı!";
+       
+        this.userService.getUserIp().subscribe((data: string) => {
+          const ip = data;
+          this.log = new Log(Number(id), durum, islem, aciklama, ip);
+          this.logService.PostLog(this.log).subscribe(s => { });
           this.denemeService.router.navigate(['/deneme']);
+          alertify.notify('Ekleme Başarılı!', 'success', 3, function(){  console.log('dismissed'); });
+        });
+      }, e => {
+        const id = this.userService.getCurrentUser();
+        const islem = "Taşınmaz Ekle";
+        const aciklama = "Taşınmaz ekle işlemi yapılamamıştır. " + e;
+        const durum = "Başarısız!";
+        
+        this.userService.getUserIp().subscribe((data: string) => {
+          const ip = data;
+          this.log = new Log(Number(id), durum, islem, aciklama, ip);
+          this.logService.PostLog(this.log).subscribe(s => { });
+          this.denemeService.router.navigate(['/deneme']);
+          alertify.notify('Ekleme Başarısız!', 'error', 3, function(){  console.log('dismissed'); });
+        });
       });
-      },e=>{ 
-        var id = this.userService.getCurrentUser(); 
-        var islem = "Add";
-        var aciklama = "Add işlemi yapılamamıştır. "+e;
-        var durum = "Başarısız!";
-        var ip;
-        this.userService.getUserIp().subscribe((data: string)=>{
-          ip = data;
-          this.log = new Log(Number(id),durum,islem,aciklama,ip);
-          this.logService.PostLog(this.log).subscribe(s=>{});
-          this.denemeService.router.navigate(['/deneme']);
-      });});
-    }   
-  } 
+    }
+  }
 }

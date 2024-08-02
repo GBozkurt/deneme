@@ -6,8 +6,8 @@ import { AppComponent } from './app.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { DenemeComponent } from './deneme/deneme.component';
 import { EkleComponent } from './ekle/ekle.component';
-import { FormsModule } from '@angular/forms';
-import { ReactiveFormsModule } from '@angular/forms';
+
+import { ReactiveFormsModule,FormsModule } from '@angular/forms';
 import { DuzenleComponent } from './duzenle/duzenle.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';

@@ -13,7 +13,7 @@ import Style from 'ol/style/Style';
 import Stroke from 'ol/style/Stroke';
 import Fill from 'ol/style/Fill';
 import CircleStyle from 'ol/style/Circle';
-import { fromLonLat} from 'ol/proj';
+import { fromLonLat } from 'ol/proj';
 import { UserService } from '../services/user.service';
 import { DenemeService } from '../services/deneme.service';
 @Component({
@@ -27,23 +27,23 @@ export class MapComponent implements OnInit, AfterViewInit {
   googleLayer: TileLayer;
   vectorSource = new VectorSource();
 
-  constructor(private userService: UserService,private denemeService:DenemeService) { }
+  constructor(private userService: UserService, private denemeService: DenemeService) { }
 
   ngOnInit(): void {
-    if(this.userService.loggedIn()){
+    if (this.userService.loggedIn()) {
       this.userService.router.navigateByUrl('/giris');
     }
     this.userService.checkRole();
     this.osmLayer = new TileLayer({
       source: new OSM(),
       visible: true,
-      opacity: 1 
+      opacity: 1
     });
 
-    
+
     this.googleLayer = new TileLayer({
       source: new XYZ({
-        url: 'https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', 
+        url: 'https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
         maxZoom: 21
       }),
       visible: true,
@@ -53,15 +53,15 @@ export class MapComponent implements OnInit, AfterViewInit {
 
   }
 
- 
+
 
   ngAfterViewInit(): void {
-    
+
     const vectorLayer = new VectorLayer({
       source: this.vectorSource,
       style: new Style({
         image: new CircleStyle({
-          radius: 7,	
+          radius: 7,
           fill: new Fill({ color: 'red' }),
           stroke: new Stroke({
             color: 'black', width: 2
@@ -77,27 +77,27 @@ export class MapComponent implements OnInit, AfterViewInit {
         zoom: 6.5
       }),
       controls: [
-        new ScaleLine() 
+        new ScaleLine()
       ]
     });
 
-    var id = this.userService.getCurrentUser(); 
+    const id = this.userService.getCurrentUser();
     this.denemeService.GetTasinmazByUserId(id).subscribe(properties => {
       properties.forEach(property => {
         const [longitude, latitude] = property.koordinatBilgileri.split(',').map(coord => parseFloat(coord.trim()));
-        
+
         const feature = new Feature({
-          geometry: new Point(fromLonLat([longitude,latitude])),
+          geometry: new Point(fromLonLat([longitude, latitude])),
           name: property.name
         });
 
         this.vectorSource.addFeature(feature);
       });
     });
-  
 
 
-   
+
+
     const osmOpacityInput = document.getElementById('osm-opacity') as HTMLInputElement;
     osmOpacityInput.addEventListener('input', (event: any) => {
       this.setOsmOpacity(parseFloat(event.target.value));
