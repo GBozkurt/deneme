@@ -6,27 +6,33 @@
   <title>Document</title>
 </head>
 <body>
-  <div id="liveAlertPlaceholder"></div>
-  <h1 style="text-align: center;padding-top: 40px;">Giriş Sayfası</h1>
-  <div class="container" style="padding-left: 200px; padding-right: 200px; padding-top: 100px;" >
+  <br>
+  
+  
+  
   <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
+    <div class="container form">
+      <div class="mb-3">
+        <h1>Giriş Sayfası</h1>
+      </div>
+      
     <div class="mb-3">
-      <label for="exampleInputEmail1" class="form-label">E-mail</label>
-      <input type="text" class="form-control form-control-sm" aria-describedby="emailHelp" formControlName="email"  >
+      <label for="exampleInputEmail1" class="form-label">E-mail:</label>
+      <input type="text" class="form-control inputs" aria-describedby="emailHelp" formControlName="email"  >
       <div id="emailHelp" class="form-text"></div>
     </div>
     
     <div class="mb-3">
-      <label for="exampleInputPassword1" class="form-label">Parola</label>
-      <input type="password" class="form-control form-control-sm" formControlName="password"  >
+      <label for="exampleInputPassword1" class="form-label">Parola:</label>
+      <input type="password" class="form-control inputs" formControlName="password"  >
     </div>
     
     <div class="d-grid gap-2 pb-4">
-      <button type="submit" class="btn btn-dark"  >Giriş Yap</button>
+      <button type="submit" class="btn ekleBtn"  >Giriş Yap</button>
     </div>
    
-    
-  </form></div>
-
+  </div>
+  </form>
+<br><br><br><br><br><br><br><br><br><br><br>
 </body>
 </html>

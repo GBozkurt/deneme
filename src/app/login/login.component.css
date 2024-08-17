@@ -1,0 +1,71 @@
+.container{
+    
+   
+    background-color: #F0F8FF;
+}
+
+.selects{
+    width: 400px;
+    height: 36px;
+    display: inline-block;
+    background-color: #F0F8FF;
+    margin-left: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h1{
+    text-align: center;
+    
+}
+label{
+    width: 90px;
+    text-align:left ;
+    
+}
+.inputs{
+    width: 400px;
+    height: 36px;
+    margin-left: 10px;
+    display: inline-block;
+    background-color: #F0F8FF;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.form{
+display: grid;
+  place-items: center;
+  width: 700px;
+  height: 300px;
+  margin-top: 180px;
+  
+  background-color: #dde6f1;
+    padding: 20px;
+ border-width: 3px;
+    border-radius: 12px; /* Daha belirgin köşe yuvarlama */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Hafif gölge */
+}
+
+
+.ekleBtn{
+    border: 1px solid #28292a;
+    border-radius: 4px;
+    width: 500px;
+    height: 36px;
+    background-color: #0056b3;
+    color: white;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    
+}
+
+.ekleBtn:hover{
+    background-color: #dde6f1;
+    color: black;
+    border-color: #0056b3;
+}
+html, body{
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #F0F8FF;
+   
+}

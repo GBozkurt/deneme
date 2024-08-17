@@ -6,54 +6,56 @@
   <title>Document</title>
 </head>
 <body>
-  <div class="container" style="padding-left: 150px; padding-right: 150px; padding-top: 20px;" >
-  <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
-
-    <label for="ilSelect">İl</label>
-    <select class="form-select mb-3 form-select-sm" aria-label="Default select example"  (change)="onIlChange()" [(ngModel)]="selectedIlId" formControlName="ilSelect"  >
+  <br>
+  <form [formGroup]="myForm" (ngSubmit)="onSubmit()"  >
+    <div class="container form" >
+      <div class="mb-3">
+    <label for="s" class="form-label"> İl:  </label>
+    <select class="form-select  selects" aria-label="Default select example"  (change)="onIlChange()" [(ngModel)]="selectedIlId" formControlName="ilSelect"  >
       <option *ngFor="let item of il" value="{{item.id}}">{{item.ilAdi}}</option>
-    </select> 
+    </select> </div>
     
-    <div *ngIf="selectedIlId" >
-      <label for="ilceSelect">İlçe</label>
-      <select class="form-select mb-3 form-select-sm" aria-label="Default select example" (change)="onIlceChange()" [(ngModel)]="selectedIlceId" formControlName="ilceSelect"  >
+    <div class="mb-3" *ngIf="selectedIlId" >
+      <label for="ilceSelect" class="form-label">İlçe:  </label>
+      <select class="form-select  selects" aria-label="Default select example" (change)="onIlceChange()" [(ngModel)]="selectedIlceId" formControlName="ilceSelect"  >
       <option *ngFor="let item of ilce" value="{{item.id}}">{{item.ilceAdi}}</option>
     </select>  
   </div> 
-  <div *ngIf="selectedIlceId">
-    <label for="mahalleSelect">Mahalle</label>
-    <select class="form-select mb-3 form-select-sm" aria-label="Default select example" formControlName="mahalleId" [(ngModel)]="selectedMahalleId"  >
+  <div class="mb-3" *ngIf="selectedIlceId">
+    <label for="mahalleSelect" class="form-label">Mahalle:  </label>
+    <select class="form-select  selects" aria-label="Default select example" formControlName="mahalleId" [(ngModel)]="selectedMahalleId"  >
       <option *ngFor="let item of mahalle" value="{{item.id}}">{{item.mahalleAdi}}</option>
     </select> 
   </div>
-    <label for="nitelikSelect">Nitelik</label>
-    <select class="form-select mb-3 form-select-sm" aria-label="Default select example" formControlName="nitelik"  > 
+  <div class="mb-3">
+    <label for="nitelikSelect" class="form-label">Nitelik:  </label>
+    <select class="form-select  selects" aria-label="Default select example" formControlName="nitelik"  > 
       <option value="Arsa">Arsa</option>
       <option value="Tarla">Tarla</option>
       <option value="Mesken">Mesken</option>
-    </select> 
+    </select> </div>
 
     <div class="mb-3">
-      <label for="exampleInputEmail1" class="form-label">Ada</label>
-      <input type="text" class="form-control form-control-sm" aria-describedby="emailHelp" formControlName="ada"  >
+      <label for="exampleInputEmail1" class="form-label">Ada:  </label>
+      <input type="text" class="form-control inputs" aria-describedby="emailHelp" formControlName="ada"  >
       <div id="emailHelp" class="form-text"></div>
     </div>
     <div class="mb-3">
-      <label for="exampleInputPassword1" class="form-label">Parsel</label>
-      <input type="text" class="form-control form-control-sm" formControlName="parsel"  >
+      <label for="exampleInputPassword1" class="form-label">     Parsel:  </label>
+      <input type="text" class="form-control inputs" formControlName="parsel"  >
     </div>
     <div class="mb-3">
-      <label for="exampleInputPassword1" class="form-label" >Koordinat Bilgileri</label>
-      <input type="text" formControlName="koordinatBilgileri" [(ngModel)]="coordinates"  readonly class="form-control form-control-sm"  >
+      <label for="exampleInputPassword1" class="form-label" >Koordinatlar:  </label>
+      <input type="text" formControlName="koordinatBilgileri" [(ngModel)]="coordinates"  readonly class="form-control inputs"  >
     </div>
 
     
     
     <div class="d-grid gap-2 pb-4">
-      <button type="submit" class="btn btn-dark"  >Ekle</button>
+      <button type="submit" class="btn ekleBtn"  >Ekle</button>
     </div>
-    
-  </form></div>
-
+  </div>
+  </form>
+  <br><br><br><br><br><br><br>
 </body>
 </html>

@@ -31,8 +31,8 @@ export class NavComponent implements OnInit {
     const secim = window.confirm('Çıkış yapmak istediğinize emin misiniz?');
     if (secim) {
       const id = this.userService.getCurrentUser();
-      const islem = "Exit";
-      const aciklama = "Exit işlemi Yapılmıştır";
+      const islem = "Çıkış";
+      const aciklama = "Çıkış işlemi Yapılmıştır";
       const durum = "Başarılı!";
       this.userService.getUserIp().subscribe((data: string) => {
         const ip = data;

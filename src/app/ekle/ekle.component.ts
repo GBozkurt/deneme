@@ -87,6 +87,9 @@ export class EkleComponent implements OnInit {
       this.deger = new Tasinmaz(parseInt(formData.mahalleId, 10), formData.ada, formData.parsel, formData.nitelik, formData.koordinatBilgileri, Number(id));
       this.postFormData(this.deger);
     }
+    else{
+      alertify.notify('Lütfen Bütün verileri giriniz!', 'error', 3, function(){  console.log('dismissed'); });
+    }
   }
 
   //FORMDAKİ VERİYİ BACKENDE GÖNDER
@@ -95,7 +98,7 @@ export class EkleComponent implements OnInit {
     if (secim) {
       this.denemeService.PostAddTasinmaz(tasinmaz).subscribe(s => {
         const id = this.userService.getCurrentUser();
-        const islem = "Taşınmaz Ekle";
+        const islem = "T-ekle";
         const aciklama = "Taşınmaz ekle işlemi yapılmıştır. Eklenen Taşınmaz: " + JSON.stringify(tasinmaz);
         const durum = "Başarılı!";
        
@@ -108,7 +111,7 @@ export class EkleComponent implements OnInit {
         });
       }, e => {
         const id = this.userService.getCurrentUser();
-        const islem = "Taşınmaz Ekle";
+        const islem = "T-ekle";
         const aciklama = "Taşınmaz ekle işlemi yapılamamıştır. " + e;
         const durum = "Başarısız!";
         

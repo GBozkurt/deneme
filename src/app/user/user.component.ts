@@ -14,13 +14,15 @@ export class UserComponent implements OnInit {
   filtreleDeger:string;
   kullanicilar: any = [];
   page: number = 1; 
-  pageSize: number = 11; 
+  pageSize: number = 8; 
   bos: number = 0;
   list:number[] = []; 
   log:Log;
   selectedIds: number[] = [];
   data: any[]; 
   id: number; 
+  sonraki:boolean;
+  onceki:boolean;
   constructor(private userService:UserService,private logService:LogService) { }
  
   ngOnInit() {
@@ -47,8 +49,14 @@ export class UserComponent implements OnInit {
   //KULLANICILARI GETİR
   get(){
     this.userService.getAllUsers().subscribe(s=>{
+      this.onceki=false;
+      this.page=1;
+      this.bos=0;
+      this.sonraki=true;
       this.kullanicilar = s;
-      this.control();this.filtreleDeger=null;
+      this.selectedIds = [];
+      this.control();
+      this.filtreleDeger=null;
       this.filtreleSecili="filtrele";},e=>{
         const id = this.userService.getCurrentUser();
         const islem = "Kullanıcıları Listeleme";
@@ -72,8 +80,12 @@ export class UserComponent implements OnInit {
   //BOŞ SATIRLARI KONTROL ET
   control(){
     const totalPages = Math.ceil(this.kullanicilar.length / this.pageSize);
-    if(this.page==totalPages){
+    const selectAllCheckbox = <HTMLInputElement>document.getElementById('selectAll');
+    selectAllCheckbox.checked = false;
+    if(this.page==totalPages || totalPages == 0){
       this.bos = this.pageSize-this.kullanicilar.length;
+      this.sonraki=false;
+      this.onceki=false;
     } 
   }
   get listMaker(){
@@ -89,7 +101,13 @@ export class UserComponent implements OnInit {
     if (this.page > 1) {
       this.page--;
       this.bos = 0;
-      
+      this.onceki=true;
+      this.sonraki=true;
+      this.selectedIds=[];
+      if(this.page == 1)
+      {
+        this.onceki=false;
+      }
     }
   }
 
@@ -99,8 +117,12 @@ export class UserComponent implements OnInit {
     if (this.page < totalPages) {
       this.page++;
       this.bos = 0;
+      this.selectedIds=[];
+      this.onceki=true;
+      this.sonraki=true;
       if(this.page==totalPages){
         const kalan = this.kullanicilar.length % this.pageSize;
+        this.sonraki=false;
         if(kalan!=0){
           this.bos = this.pageSize - kalan;
         }
@@ -110,15 +132,49 @@ export class UserComponent implements OnInit {
 
   //CHECKBOXA GÖRE İD ALMA
   onCheckboxChange(event: any, id: number) {
+    const selectAllCheckbox = <HTMLInputElement>document.getElementById('selectAll');
+    
     if (event.target.checked) {
       this.selectedIds.push(id);
+      if (this.selectedIds.length === this.paginatedKullanicilar.length) {
+        selectAllCheckbox.checked = true;
+      }
     } else {
       const index = this.selectedIds.indexOf(id);
       if (index > -1) {
         this.selectedIds.splice(index, 1);
       }
+      selectAllCheckbox.checked = false;
     }
   }
+  onSelectAllChange(event: any) {
+    this.selectedIds = [];
+    if (event.target.checked) {
+      this.paginatedKullanicilar.forEach(item => {
+        const id=this.userService.getCurrentUser();
+        if(item.id==id){
+          return null;
+        }
+        else{
+          this.selectedIds.push(item.id);
+        }
+      });
+    }
+  }
+
+  isSelected(id: number): boolean {
+    return this.selectedIds.includes(id);
+  }
+
+  selectAllCheckboxes(event: any) {
+    if (event.target.checked) {
+      this.selectedIds = this.paginatedKullanicilar.map(tasinmaz => tasinmaz.id);
+      console.log(this.selectedIds);
+    } else {
+      this.selectedIds = [];
+    }
+  }
+
 
   //KULLANICI EKLEME
   ekle(){
@@ -127,22 +183,27 @@ export class UserComponent implements OnInit {
 
   //SEÇİLEN KULLANICILARI DELETE'E GÖNDERME
   deleteSelected(){
+    if(this.selectedIds.length==0 ){
+      alertify.notify('Lütfen bir seçim yapınız!', 'error', 3, function(){  console.log('dismissed'); });
+    }
+    else{
     const secim = window.confirm('Seçili taşınmazları silmek istediğinize emin misiniz?');
     if (secim){
       this.selectedIds.forEach(element => {
         this.delete(element);
         
       });
-      
+      const selectAllCheckbox = <HTMLInputElement>document.getElementById('selectAll');
+        selectAllCheckbox.checked = false;
       this.selectedIds = [];
-    }   
+    }   }
   }
 
   //KULLANICI SİLME
   delete(id:number){
     this.userService.DeleteUser(id).subscribe(s=>{
       const id = this.userService.getCurrentUser();
-      const islem = "Kullanıcı Silme";
+      const islem = "K-Silme";
       const aciklama = "Kullanıcı başarıyla silindi: "+JSON.stringify(s);
       const durum = "Başarılı!";
       
@@ -156,7 +217,7 @@ export class UserComponent implements OnInit {
       });
       },e=>{
         const id = this.userService.getCurrentUser();
-        const islem = "Kullanıcı Silme";
+        const islem = "K-Silme";
         const aciklama = "Kullanıcı silerken hata!: "+e;
         const durum = "Başarısız!";
         
@@ -171,6 +232,9 @@ export class UserComponent implements OnInit {
  
   //KULLANICI RAPORLA
   exportToCSV(): void {
+    if(this.selectedIds.length==0){
+      alertify.notify('Lütfen bir seçim Yapınız!', 'error', 3, function () { console.log('dismissed'); });
+    }else{
     if(this.selectedIds.length ==1){
       this.userService.getUserById(this.selectedIds[0]).subscribe(s=>
       {
@@ -191,14 +255,17 @@ export class UserComponent implements OnInit {
         link.click();
         document.body.removeChild(link);
       }
+      const selectAllCheckbox = <HTMLInputElement>document.getElementById('selectAll');
+        selectAllCheckbox.checked = false;
+        this.selectedIds = [];
       alertify.notify('Raporlama Başarılı!', 'success', 3, function(){  console.log('dismissed'); });
       }
       );
     }
     else{
       
-      alertify.notify('Bir Seçim Yapınız!', 'error', 3, function(){  console.log('dismissed'); });
-    }
+      alertify.notify('Lütfen bir seçim yapınız!', 'error', 3, function(){  console.log('dismissed'); });
+    }}
     
   }
 
@@ -206,9 +273,11 @@ export class UserComponent implements OnInit {
   filtrele(){
     if(this.filtreleSecili == "id"){
       this.userService.getUserById(Number(this.filtreleDeger)).subscribe(s=>{
-       
+        this.selectedIds = [];
         this.kullanicilar = [s];        
         this.control();
+      },e=>{
+        alertify.notify('Böyle bir kullanıcı yok!', 'error', 3, function(){  console.log('dismissed'); });
       });
     }
     else if(this.filtreleSecili == "filtrele"){
@@ -216,7 +285,9 @@ export class UserComponent implements OnInit {
     }
     else{
        this.userService.getUsersByString(this.filtreleSecili,this.filtreleDeger).subscribe(s=>{
-         this.kullanicilar=s;this.control();
+        this.selectedIds = [];
+         this.kullanicilar=s;
+         this.control();
        })
      }
   }
@@ -232,7 +303,7 @@ export class UserComponent implements OnInit {
       this.userService.router.navigate(['/userDuzenle']);
     }
     else{
-      alert("Lütfen sadece bir seçim yapınız!");
+      alertify.notify('Lütfen bir seçim yapınız!', 'error', 3, function(){  console.log('dismissed'); });
     } 
   }
 }

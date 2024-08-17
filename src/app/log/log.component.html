@@ -6,10 +6,10 @@
     <title>Deneme</title>
 </head>
 <body>
-  <div class="container" style=" padding-top: 20px;" >
-    <div style="text-align: center;">
-      <select class="form-select" aria-label="Default select example"
-        style="width: 300px;margin-bottom: 30px;display: inline-block;" [(ngModel)]="filtreleSecili">
+  <div class="container tablea">
+    <div class="row justify-content-center mt-3 mb-2">
+      <select class="form-select aramaSelect" aria-label="Default select example"
+         [(ngModel)]="filtreleSecili">
         <option value="filtrele">Filtrele..</option>
         <option value="id">İd</option>
         <option value="kullaniciid">Kullanıcı Id</option>
@@ -19,60 +19,58 @@
         <option value="tarih">Tarih(Yıl-Ay-Gün)</option>
         <option value="kullaniciip">Kullanıcı Ip</option>
       </select>
-      <input type="text" placeholder="Değer.." [(ngModel)]="filtreleDeger" class="form-control" style="width: 300px;margin-bottom: 30px;margin-left: 20px;display: inline-block;">
-      <button class="btn btn-dark" style="margin-left: 20px;" (click)="filtrele()">Ara..</button>
-      <button class="icon-button" style="margin-left: 20px;" (click)="getLogs()"><i class="fas fa-sync-alt fa-m" ></i></button></div>
-          <table class="table table-bordered  ">
+      <input type="text" placeholder="Değer.." [(ngModel)]="filtreleDeger" class="form-control aramaInput">
+      <button class="btn aramaButton" (click)="filtrele()">Ara..</button>
+      <button class="icon-button-middle  aramaIconButton" (click)="getLogs()"><i class="fas fa-sync-alt icon-medium" ></i></button></div>
+          <table class="table table-bordered table-secondary mb-3 ">
               <thead>
-                <tr class="table-dark">
-                  <th scope="col"></th>
-                  <th scope="col">Id</th>
-                  <th scope="col">Kullanıcı Id</th>
-                  <th scope="col">Durum</th>
-                  <th scope="col">İşlem</th>
-                  <th scope="col" class="fixed-width">Açıklama</th>
-                  <th scope="col">Tarih</th>
-                  <th scope="col">Kullanıcı Ip</th>
-                  
+                <tr >
+                  <td class="tdCheck trthead"> <input type="checkbox" id="selectAll" (change)="onSelectAllChange($event)"></td>
+                  <th scope="col" class="tdId trthead">Id</th>
+                  <th scope="col" class="td trthead">Kullanıcı Id</th>
+                  <th scope="col" class="td trthead">Durum</th>
+                  <th scope="col" class="td trthead">İşlem</th>
+                  <th scope="col" class="tdKoord trthead">Açıklama</th>
+                  <th scope="col" class="td trthead">Tarih</th>
+                  <th scope="col" class="td trthead">Kullanıcı Ip</th>
                 </tr>
               </thead>
               <tbody>
                 <tr *ngFor="let item of paginatedKullanicilar">
-                  <td><input type="checkbox" value="item.id" (change)="onCheckboxChange($event, item.id)"></td>
-                  <th scope="row">{{item.id}}</th>
-                  <td>{{item.userId}}</td>
-                  <td>{{item.durum}}</td>
-                  <td>{{item.islemTip}}</td>
-                  <td class="fixed-width">{{item.aciklama}}</td>
-                  <td>{{item.tarihSaat}}</td>
-                  <td>{{item.kullaniciIp}}</td>
-                 
+                  <td class="tdCheck trBody"><input type="checkbox" value="item.id" [checked]="selectedIds.includes(item.id)" (change)="onCheckboxChange($event, item.id)"></td>
+                  <th class="tdId trBody" scope="row">{{item.id}}</th>
+                  <td class="td trBody">{{item.userId}}</td>
+                  <td class="td trBody">{{item.durum}}</td>
+                  <td class="td trBody">{{item.islemTip}}</td>
+                  <td class="fixed-width tdKoord trBody">
+                    <div>{{item.aciklama | slice:0:50}}...</div>
+                  </td>
+                  <td class="td trBody">{{item.tarihSaat  | slice:0:10}}</td>
+                  <td class="td trBody">{{item.kullaniciIp}}</td>
                 </tr>
-                
-                  <tr *ngFor="let item of listMaker">
-                    <th scope="row"></th>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td style="color: rgb(255, 255, 255);">boş</td>
-                  </tr>
+                <tr *ngFor="let item of listMaker">
+                  <th class="tdCheck trBody" scope="row"></th>
+                  <td class="tdId trBody"></td>
+                  <td class="td trBody"></td>
+                  <td class="td trBody"></td>
+                  <td class="td trBody"></td>
+                  <td class="fixed-width tdKoord trBody"></td>
+                  <td class="td trBody"></td>
+                  <td class="td trBody"></td>
+                </tr>
               </tbody>
             </table>
             <div class="text-center pb-2 mt-4">
-             
-              
-              
-              <button class="icon-button" (click)="exportToCSV()"><i class="fas fa-print fa-3x white-icon"
+              <button class="icon-button-large" (click)="exportToCSV()"><i class="fas fa-print icon-large renkRapor"
                   ></i></button>
             </div>
           
-            <div class="text-center">
-              <button class="btn btn-outline-secondary btn-sm  m-1" (click)="previousPage()">Önceki</button>
-              <button class="btn btn-outline-dark btn-sm" (click)="nextPage()">Sonraki</button>
+            <div class="text-center ">
+              <button *ngIf="onceki" class="btn  oncekiBtn" (click)="previousPage()">Önceki</button>
+              <button *ngIf="onceki==false" class="btn oncekiBtnHidden"></button>
+              <button *ngIf="sonraki"  class="btn  sonrakiBtn" (click)="nextPage()">Sonraki</button>
+              <button *ngIf="sonraki==false" class="btn sonrakiBtnHidden"></button>
             </div>
-      </div>
+      </div><br>
 </body>
 </html>

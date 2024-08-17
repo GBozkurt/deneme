@@ -7,16 +7,17 @@
 </head>
 <body>
   
-  <div class="container" style="padding-left: 200px; padding-right: 200px; padding-top: 130px;" >
+ <br>
   <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
+    <div class="container form" >
     <div class="mb-3">
       <label for="exampleInputEmail1" class="form-label">İsim</label>
-      <input type="text" class="form-control form-control-sm" aria-describedby="emailHelp" formControlName="name"  >
+      <input type="text" class="form-control inputs" aria-describedby="emailHelp" formControlName="name"  >
       <div id="emailHelp" class="form-text"></div>
     </div>
     <div class="mb-3">
       <label for="exampleInputEmail1" class="form-label">E-mail</label>
-      <input type="email" class="form-control form-control-sm"  id="exampleInputEmail1" aria-describedby="emailHelp" formControlName="username"  >
+      <input type="email" class="form-control inputs"  id="exampleInputEmail1" aria-describedby="emailHelp" formControlName="username"  >
       <div *ngIf="myForm.controls['username'].invalid && myForm.controls['username'].touched" class="text-danger">
         Lütfen geçerli bir e-posta adresi girin.
       </div>
@@ -24,23 +25,23 @@
     
     <div class="mb-3">
       <label for="exampleInputPassword1" class="form-label">Parola</label>
-      <input type="password" class="form-control form-control-sm" formControlName="password"  >
+      <input type="password" class="form-control inputs" formControlName="password"  >
       <div *ngIf="myForm.controls['password'].invalid && myForm.controls['password'].touched" class="text-danger">
         Parola en az 1 büyük harf, 1 özel karakter, 1 rakam içermeli ve 8 karakterli olmalı.
       </div>
     </div>
     <div class="mb-3">
     <label for="rol">Rol</label>
-    <select class="form-select mb-3 form-select-sm" id="rol" aria-label="Default select example" [(ngModel)]="rol"  formControlName="rol"  >
+    <select class="form-select  selects" id="rol" aria-label="Default select example" [(ngModel)]="rol"  formControlName="rol"  >
       <option value="user"  >User</option>
       <option value="admin">Admin</option>
     </select> </div>
     
     <div class="d-grid gap-2 pb-4">
-      <button type="submit" class="btn btn-dark"  >Düzenle</button>
+      <button type="submit" class="btn ekleBtn"  >Düzenle</button>
     </div>
-    
-  </form></div>
-
+  </div>
+  </form>
+<br><br><br><br><br><br><br><br><br>
 </body>
 </html>

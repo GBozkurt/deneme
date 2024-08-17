@@ -78,7 +78,7 @@ export class RegisterComponent implements OnInit {
     this.userService.PostRegister(registerUser).subscribe(s => {
 
       const id = this.userService.getCurrentUser();
-      const islem = "Kullanıcı Kayıt";
+      const islem = "K-Ekle";
       const aciklama = "Kullanıcı kayıt işlemi yapılmıştır" + JSON.stringify(s);
       const durum = "Başarılı!";
       
@@ -92,7 +92,7 @@ export class RegisterComponent implements OnInit {
 
     }, e => {
       const id = this.userService.getCurrentUser();
-      const islem = "Kullanıcı Kayıt";
+      const islem = "K-Ekle";
       const aciklama = "Kullanıcı kayıt işlemi yapılamamıştır: " + e;
       const durum = "Başarısız!";
       

@@ -1,9 +1,27 @@
-<div id="map" class="map"></div>
 
-<div class="layer-controls">
-  <label for="osm-opacity">OpenStreetMap Opaklığı:</label>
-  <input type="range" style="width: 200px;margin: 10px;" id="osm-opacity" min="0" max="1" step="0.1" value="1">
-  <br><br>
-  <label for="google-opacity" style="margin-right: 15px;">Google Maps Opaklığı:</label>
-  <input type="range" style="width: 200px;margin: 10px;" id="google-opacity" min="0" max="1" step="0.1" value="1">
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+</head>
+<body>
+  <div class="content">
+    <div id="map-container">
+      <div id="map" class="map"></div>
+    </div>
+    
+    <div class="layer-controls">
+      <label for="osm-opacity" class="m-3">OpenStreetMap Opaklığı:</label>
+      <input type="range" class="inputs margin-r" id="osm-opacity" min="0" max="1" step="0.1" value="1">
+      
+      <label for="google-opacity" class="m-3">Google Maps Opaklığı:</label>
+      <input type="range" class="inputs " id="google-opacity" min="0" max="1" step="0.1" value="1">
+      <br><br><br><br>
+    </div>
+  </div>
+</body>
+</html>
+
+

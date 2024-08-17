@@ -7,70 +7,71 @@
 </head>
 <body>
 
-  <div class="container" style="padding-left: 40px; padding-right: 50px; padding-top: 20px;" >
-    <div style="text-align: center;">
-      <select class="form-select" aria-label="Default select example"
-        style="width: 300px;margin-bottom: 30px;display: inline-block;" [(ngModel)]="filtreleSecili">
+  <div class="container tablea">
+    <div class="row justify-content-center mt-3 mb-2">
+      <select class="form-select aramaSelect" aria-label="Default select example"
+        [(ngModel)]="filtreleSecili">
         <option value="filtrele">Filtrele..</option>
         <option value="id">İd</option>
         <option value="isim">İsim</option>
         <option value="email">Email</option>
         <option value="rol">Rol</option>
       </select>
-      <input type="text" placeholder="Değer.." [(ngModel)]="filtreleDeger" class="form-control" style="width: 300px;margin-bottom: 30px;margin-left: 20px;display: inline-block;">
-      <button class="btn btn-dark" style="margin-left: 20px;" (click)="filtrele()">Ara..</button>
-      <button class="icon-button" style="margin-left: 20px;" (click)="get()"><i class="fas fa-sync-alt fa-m" ></i></button></div>
-    <table class="table table-bordered  table-sm">
+      <input type="text" placeholder="Değer.." [(ngModel)]="filtreleDeger" class="form-control aramaInput" >
+      <button class="btn aramaButton"  (click)="filtrele()">Ara..</button>
+      <button class="icon-button-middle aramaIconButton"  (click)="get()"><i class="fas fa-sync-alt icon-medium" ></i></button></div>
+    <table class="table table-bordered table-secondary mb-3">
         <thead>
-          <tr class="table-dark">
-            <td></td>
-            <th scope="col">Id</th>
-            <th scope="col">İsim</th>
-            <th scope="col">Email</th>
-            <th scope="col">Rol</th>
-           
+          <tr>
+            <td class="tdCheck trthead"> <input type="checkbox" id="selectAll" (change)="onSelectAllChange($event)"></td>
+            <th scope="col" class="tdId trthead">Id</th>
+            <th scope="col" class="td trthead">İsim</th>
+            <th scope="col" class="tdKoord trthead">Email</th>
+            <th scope="col" class="td trthead">Rol</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let item of paginatedKullanicilar">
-            <td *ngIf="this.id ==item.id"></td>
-            <td *ngIf="this.id !=item.id"><input type="checkbox" value="item.id" (change)="onCheckboxChange($event, item.id)"></td>
-            <th scope="row">{{item.id}}</th>
-            <td>{{item.name}}</td>
-            <td>{{item.email}}</td>
-            <td>{{item.role}}</td>
+            <td class="tdCheck trBody"  *ngIf="this.id ==item.id"></td>
+            <td class="tdCheck trBody" *ngIf="this.id !=item.id"><input type="checkbox" [checked]="selectedIds.includes(item.id)" value="item.id" (change)="onCheckboxChange($event, item.id)"></td>
+            <th class="tdId trBody" scope="row">{{item.id}}</th>
+            <td class="td trBody">{{item.name}}</td>
+            <td class="tdKoord trBody">{{item.email}}</td>
+            <td class="td trBody">{{item.role}}</td>
           </tr>
           
             <tr *ngFor="let item of listMaker">
-              <th scope="row"></th>
-              <td></td>
-              <td></td>
-              <td></td>
+              <th class="tdCheck trBody" scope="row"></th>
+              <td class="tdId trBody"></td>
+              <td class="td trBody"></td>
+              <td class="td trBody"></td>
               
-              <td style="color: rgb(255, 255, 255);">boş</td>
+              <td class="tdKoord trBody"></td>
             </tr>
          
         </tbody>
       </table>
-  <div class="text-center pb-2 mt-4">
-    <button class="icon-button" (click)="ekle()"><i class="fas fa-plus-circle fa-3x white-icon"></i></button>
-    <button class="icon-button" (click)="duzenle()"><i class="fas fa-edit fa-3x white-icon"
-        style="margin-left: 80px;"></i></button>
-    <button class="icon-button" (click)="deleteSelected()"><i class="fas fa-trash fa-3x white-icon"
-        style="margin-left: 80px;"></i></button>
-    <button class="icon-button" (click)="exportToCSV()"><i class="fas fa-print fa-3x white-icon"
-        style="margin-left: 80px;"></i></button>
+  <div class="text-center ">
+    <button class="icon-button-large" (click)="ekle()"><i class="fas fa-plus-circle icon-large renkEkle"></i></button>
+    <button class="icon-button-large" (click)="duzenle()"><i class="fas fa-edit icon-large  renkEdit"
+        ></i></button>
+    <button class="icon-button-large" (click)="deleteSelected()"><i class="fas fa-trash icon-large renkSil"
+        ></i></button>
+    <button class="icon-button-large" (click)="exportToCSV()"><i class="fas fa-print icon-large renkRapor"
+        ></i></button>
   </div>
       <div class="text-center mt-3">
-        <button class="btn btn-outline-secondary btn-sm  m-1" (click)="previousPage()">Önceki</button>
-        <button class="btn btn-outline-dark btn-sm" (click)="nextPage()">Sonraki</button>
+        <button *ngIf="onceki" class="btn  oncekiBtn" (click)="previousPage()">Önceki</button>
+        <button *ngIf="onceki==false" class="btn oncekiBtnHidden"></button>
+        <button *ngIf="sonraki"  class="btn  sonrakiBtn" (click)="nextPage()">Sonraki</button>
+        <button *ngIf="sonraki==false" class="btn sonrakiBtnHidden"></button>
       </div>
       
 </div>
 
     
 
- 
+<br>
 
 </body>
 </html>

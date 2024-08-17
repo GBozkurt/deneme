@@ -7,11 +7,11 @@
   <title>Deneme</title>
 </head>
 
-<body>
-  <div class="container" style="padding-left: 40px; padding-right: 50px; padding-top: 20px; ">
-    <div style="text-align: center;">
-    <select class="form-select" aria-label="Default select example"
-      style="width: 300px;margin-bottom: 30px;display: inline-block;" [(ngModel)]="filtreleSecili">
+<body >
+  <div class="container tablea"  >
+    <div class="row justify-content-center mt-3 mb-2">
+    <select class="form-select aramaSelect" aria-label="Default select example"
+       [(ngModel)]="filtreleSecili">
       <option value="filtrele">Filtrele..</option>
       <option value="id">İd</option>
       <option value="il">İl</option>
@@ -22,67 +22,70 @@
       <option value="nitelik">Nitelik</option>
       <option value="koordinatbilgileri">Adres</option>
     </select>
-    <input type="text" placeholder="Değer.." [(ngModel)]="filtreleDeger" class="form-control" style="width: 300px;margin-bottom: 30px;margin-left: 20px;display: inline-block;">
-    <button class="btn btn-dark" style="margin-left: 20px;" (click)="filtrele()">Ara..</button>
-    <button class="icon-button" style="margin-left: 20px;" (click)="get()"><i class="fas fa-sync-alt fa-m" ></i></button></div>
+    <input type="text" placeholder="Değer.." [(ngModel)]="filtreleDeger" class="form-control aramaInput" >
+    <button class="btn  aramaButton" (click)="filtrele()">Ara..</button>
+    <button class="icon-button-middle  aramaIconButton"  (click)="get()"><i class="fas fa-sync-alt  icon-medium" ></i></button></div>
     
-    <table class="table table-bordered  table-sm">
+    <table class="table table-bordered table-secondary mb-3 ">
       <thead>
-        <tr class="table-dark">
-          <td></td>
-          <th scope="col">Id</th>
-          <th scope="col">İl</th>
-          <th scope="col">İlçe</th>
-          <th scope="col">Mahalle</th>
-          <th scope="col">Ada</th>
-          <th scope="col">Parsel</th>
-          <th scope="col">Nitelik</th>
-          <th scope="col">Koordinat</th>
-
+        <tr >
+          <td class="tdCheck trthead"> <input type="checkbox" id="selectAll" (change)="onSelectAllChange($event)"></td>
+          <th scope="col" class="tdCheck trthead">Id</th>
+          <th scope="col" class="td trthead">İl</th>
+          <th scope="col" class="td trthead">İlçe</th>
+          <th scope="col" class="td trthead">Mahalle</th>
+          <th scope="col" class="td trthead">Ada</th>
+          <th scope="col" class="td trthead">Parsel</th>
+          <th scope="col" class="td trthead" >Nitelik</th>
+          <th scope="col" class="tdKoord trthead">Koordinat</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let item of paginatedTasinmazlar">
-          <td><input type="checkbox" value="item.id" (change)="onCheckboxChange($event, item.id)"></td>
-          <th scope="row">{{item.id}}</th>
-          <td>{{item.mahalle.ilce.il.ilAdi}}</td>
-          <td>{{item.mahalle.ilce.ilceAdi}}</td>
-          <td>{{item.mahalle.mahalleAdi}}</td>
-          <td>{{item.ada}}</td>
-          <td>{{item.parsel}}</td>
-          <td>{{item.nitelik}}</td>
-          <td>{{item.koordinatBilgileri}}</td>
+        <tr *ngFor="let item of paginatedTasinmazlar" >
+          <td class="tdCheck trBody"><input type="checkbox" [checked]="selectedIds.includes(item.id)" value="item.id" (change)="onCheckboxChange($event, item.id)"></td>
+          <th class="tdCheck trBody" scope="row">{{item.id}}</th>
+          <td class="td trBody">{{item.mahalle.ilce.il.ilAdi}}</td>
+          <td class="td trBody">{{item.mahalle.ilce.ilceAdi}}</td>
+          <td class="td trBody">{{item.mahalle.mahalleAdi}}</td>
+          <td class="td trBody">{{item.ada}}</td>
+          <td class="td trBody">{{item.parsel}}</td>
+          <td class="td trBody">{{item.nitelik}}</td>
+          <td class="td trBody">{{item.koordinatBilgileri}}</td>
 
         </tr>
 
         <tr *ngFor="let item of listMaker">
-          <th scope="row"></th>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td style="color: rgb(255, 255, 255);">boş</td>
+          <th class="tdCheck trBody" scope="row"></th>
+          <td class="tdCheck trBody"></td>
+          <td class="td trBody"></td>
+          <td class="td trBody"></td>
+          <td class="td trBody"></td>
+          <td class="td trBody"></td>
+          <td class="td trBody"></td>
+          <td class="td trBody"></td>
+          <td class="td trBody"></td>
         </tr>
 
       </tbody>
     </table>
-    <div class="text-center pb-2 mt-4">
-      <button class="icon-button" (click)="ekle()"><i class="fas fa-plus-circle fa-3x" ></i></button>
-      <button class="icon-button" (click)="duzenle()"><i class="fas fa-edit fa-3x"
-          style="margin-left: 80px;"></i></button>
-      <button class="icon-button" (click)="deleteSelected()"><i class="fas fa-trash fa-3x"
-          style="margin-left: 80px;"></i></button>
-      <button class="icon-button" (click)="exportToCSV()"><i class="fas fa-print fa-3x"
-          style="margin-left: 80px;"></i></button>
+    <div class="text-center ">
+      <button class="icon-button-large " (click)="ekle()"><i class="fas fa-plus-circle icon-large renkEkle" ></i></button>
+      <button class="icon-button-large " (click)="duzenle()"><i class="fas fa-edit icon-large  renkEdit"
+          ></i></button>
+      <button class="icon-button-large" (click)="deleteSelected()"><i class="fas fa-trash icon-large renkSil"
+          ></i></button>
+      <button class="icon-button-large" (click)="exportToCSV()"><i class="fas fa-print icon-large renkRapor"
+          ></i></button>
     </div>
     <div class="text-center mt-3">
-      <button class="btn btn-outline-secondary btn-sm  m-1" (click)="previousPage()">Önceki</button>
-      <button class="btn btn-outline-dark btn-sm" (click)="nextPage()">Sonraki</button>
+      <button *ngIf="onceki" class="btn  oncekiBtn" (click)="previousPage()">Önceki</button>
+      <button *ngIf="onceki==false" class="btn oncekiBtnHidden"></button>
+      <button *ngIf="sonraki"  class="btn  sonrakiBtn" (click)="nextPage()">Sonraki</button>
+      <button *ngIf="sonraki==false" class="btn sonrakiBtnHidden"></button>
     </div>
   </div>
+
+  <br>
 </body>
 
 </html>

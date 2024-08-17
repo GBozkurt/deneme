@@ -1,0 +1,19 @@
+.navRenk{
+    background-color:  #0056b3;
+}
+
+.cikisButton{
+    width: 110px;
+    border-width: 0px;
+}
+
+.deneme{
+    border-radius: 7px;
+    height: 40px;
+}
+.deneme:hover{
+    background-color: #ced4da;
+    color: black;
+    border-radius: 7px;
+    height: 40px;
+}

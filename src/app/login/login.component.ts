@@ -41,8 +41,8 @@ export class LoginComponent implements OnInit {
     this.userService.PostLogin(data).subscribe(s => {
       this.userService.setToken(s['token'].toString());
       const id = this.userService.getCurrentUser();
-      const islem = "Login";
-      const aciklama = "Login işlemi Yapılmıştır";
+      const islem = "Giriş";
+      const aciklama = "Giriş işlemi Yapılmıştır";
       const durum = "Başarılı!";
       this.userService.getUserIp().subscribe((data: string) => {
         const ip = data;

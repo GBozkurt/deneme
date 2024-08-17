@@ -2,48 +2,24 @@
 @import "~alertifyjs/build/css/alertify.min.css";
 @import "~alertifyjs/build/css/themes/default.min.css";
 /* You can add global styles to this file, and also import other style files */
-#map {
-  height: 500px;
-  width: 100%;
-}
 
-.layer-controls {
-  margin: 10px;
-  padding: 10px;
-  background-color: #f8f9fa;
-}
 
-input[type="range"] {
-  width: 100%;
-}
 
-/* Ölçek denetleyicisinin konumlandırması */
+
+
+
 .ol-scale-line {
   background: white;
   border: 1px solid #ccc;
   border-radius: 4px;
   padding: 2px;
-  position: absolute; /* Harita üzerinde doğru konumlandırılması için */
-  bottom: 10px; /* Alt köşede yer alacak şekilde konumlandırma */
-  right: 10px; /* Sağ köşede yer alacak şekilde konumlandırma */
+  position: absolute; 
+  bottom: 10px;
+  right: 10px; 
 }
 
-  .fixed-width {
-    width: 1300px; /* Sabit genişlik verin */
-    word-wrap: break-word; /* Satır kaydırmayı sağlamak için */
-    word-break: break-all; /* Kelime içi kırmayı sağlamak için */
-    white-space: normal; /* Normal satır kaydırmayı etkinleştirin */
-    font-size: 13px;
-  }
-
-  .table td {
-    overflow: hidden; /* Taşmayı gizleyin */
-  }
-
+ 
+  
   
 
-  .icon-button {
-    background: none;
-    border: none;
-    cursor: pointer;
-  }
+  

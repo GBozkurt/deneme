@@ -18,13 +18,15 @@ export class DenemeComponent implements OnInit {
   filtreleDeger: string;
   tasinmazlar: any = [];
   page: number = 1;
-  pageSize: number = 11;
+  pageSize: number = 8;
   bos: number = 0;
   list: number[] = [];
   log: Log;
   deger: Tasinmaz;
   selectedIds: number[] = [];
   data: any[];
+  sonraki:boolean;
+  onceki:boolean;
   ngOnInit() {
     if ((this.userService.loggedIn())) {
       this.userService.router.navigateByUrl('/giris');
@@ -45,7 +47,12 @@ export class DenemeComponent implements OnInit {
   get() {
     const id = this.userService.getCurrentUser();
     this.denemeService.GetTasinmazByUserId(id).subscribe(s => {
+      this.onceki=false;
+      this.sonraki=true;
       this.tasinmazlar = s;
+      this.bos=0;
+      this.page=1;
+      this.selectedIds = [];
       this.control();
       this.filtreleDeger = null;
       this.filtreleSecili = "filtrele";
@@ -55,8 +62,12 @@ export class DenemeComponent implements OnInit {
   //BOŞ SATIR KONTROLÜ
   control() {
     const totalPages = Math.ceil(this.tasinmazlar.length / this.pageSize);
+    const selectAllCheckbox = <HTMLInputElement>document.getElementById('selectAll');
+        selectAllCheckbox.checked = false;
     if (this.page == totalPages || totalPages == 0) {
       this.bos = this.pageSize - this.tasinmazlar.length;
+      this.sonraki=false;
+      this.onceki=false;
     }
   }
   get listMaker() {
@@ -72,7 +83,13 @@ export class DenemeComponent implements OnInit {
     if (this.page > 1) {
       this.page--;
       this.bos = 0;
-
+      this.onceki=true;
+      this.sonraki=true;
+      this.selectedIds=[];
+      if(this.page == 1)
+      {
+        this.onceki=false;
+      }
     }
   }
   //SONRAKİ SAYFA
@@ -81,8 +98,12 @@ export class DenemeComponent implements OnInit {
     if (this.page < totalPages) {
       this.page++;
       this.bos = 0;
+      this.selectedIds=[];
+      this.onceki=true;
+      this.sonraki=true;
       if (this.page == totalPages) {
         const kalan = this.tasinmazlar.length % this.pageSize;
+        this.sonraki=false;
         if (kalan != 0) {
           this.bos = this.pageSize - kalan;
         }
@@ -94,13 +115,39 @@ export class DenemeComponent implements OnInit {
 
   //CHECKBOX DEĞİŞİNCE ID ALMA
   onCheckboxChange(event: any, id: number) {
+    const selectAllCheckbox = <HTMLInputElement>document.getElementById('selectAll');
+    
     if (event.target.checked) {
       this.selectedIds.push(id);
+      if (this.selectedIds.length === this.paginatedTasinmazlar.length) {
+        selectAllCheckbox.checked = true;
+      }
     } else {
       const index = this.selectedIds.indexOf(id);
       if (index > -1) {
         this.selectedIds.splice(index, 1);
       }
+      selectAllCheckbox.checked = false;
+    }
+  }
+  onSelectAllChange(event: any) {
+    this.selectedIds = [];
+    if (event.target.checked) {
+      this.paginatedTasinmazlar.forEach(item => {
+        this.selectedIds.push(item.id);
+      });
+    }
+  }
+
+  isSelected(id: number): boolean {
+    return this.selectedIds.includes(id);
+  }
+
+  selectAllCheckboxes(event: any) {
+    if (event.target.checked) {
+      this.selectedIds = this.paginatedTasinmazlar.map(tasinmaz => tasinmaz.id);
+    } else {
+      this.selectedIds = [];
     }
   }
 
@@ -111,16 +158,23 @@ export class DenemeComponent implements OnInit {
 
   //SEÇİLEN TAŞINMAZLARI DELETE'E GÖNDERME
   deleteSelected() {
-    const secim = window.confirm('Seçili taşınmazları silmek istediğinize emin misiniz?');
-    if (secim) {
-      this.selectedIds.forEach(element => {
-        this.delete(element);
-
-      });
-      
-      this.selectedIds = [];
-      
+    if(this.selectedIds.length==0 ){
+      alertify.notify('Lütfen bir seçim yapınız!', 'error', 3, function(){  console.log('dismissed'); });
     }
+    else{
+      const secim = window.confirm('Seçili taşınmazları silmek istediğinize emin misiniz?');
+      if (secim) {
+        this.selectedIds.forEach(element => {
+          this.delete(element);
+  
+        });
+        const selectAllCheckbox = <HTMLInputElement>document.getElementById('selectAll');
+        selectAllCheckbox.checked = false;
+        this.selectedIds = [];
+        
+      }
+    }
+   
   }
 
   //TAŞINMAZ DÜZENLEME
@@ -134,7 +188,7 @@ export class DenemeComponent implements OnInit {
       this.denemeService.router.navigate(['/duzenle']);
     }
     else {
-      alert("Lütfen sadece bir seçim yapınız!");
+      alertify.notify('Lütfen bir seçim yapınız!', 'error', 3, function(){  console.log('dismissed'); });
     }
 
   }
@@ -171,11 +225,14 @@ export class DenemeComponent implements OnInit {
           document.body.removeChild(link);
         }
         alertify.notify('Raporlama Başarılı!', 'success', 3, function(){  console.log('dismissed'); });
+        const selectAllCheckbox = <HTMLInputElement>document.getElementById('selectAll');
+        selectAllCheckbox.checked = false;
+        this.selectedIds = [];
       }
       );
     }
     else {
-      alertify.notify('Raporlama Başarısız!', 'error', 3, function(){  console.log('dismissed'); });
+      alertify.notify('Lütfen bir seçim yapınız!', 'error', 3, function(){  console.log('dismissed'); });
     }
 
   }
@@ -187,7 +244,7 @@ export class DenemeComponent implements OnInit {
     this.denemeService.DeleteTasinmaz(id).subscribe(s => {
       
       const id = this.userService.getCurrentUser();
-      const islem = "Taşınmaz Silme";
+      const islem = "T-Silme";
       const aciklama = "Taşınmaz silme işlemi yapılmıştır. Silinen Taşınmaz: " + JSON.stringify(this.deger);
       const durum = "Başarılı!";
       
@@ -202,7 +259,7 @@ export class DenemeComponent implements OnInit {
     },
       e => {
         const id = this.userService.getCurrentUser();
-        const islem = "Taşınmaz Silme";
+        const islem = "T-Silme";
         const aciklama = "Taşınmaz silme işlemi yapılamamıştır. " + e;
         const durum = "Başarısız!";
         
@@ -218,18 +275,38 @@ export class DenemeComponent implements OnInit {
   //TAŞINMAZLARI FİLTRELEME
   filtrele() {
     if (this.filtreleSecili == "id") {
-      this.denemeService.GetTasinmazById(Number(this.filtreleDeger)).subscribe(s => {
-        this.tasinmazlar = [s];
-        this.control();
-      });
+      if(this.filtreleDeger==null){
+        alertify.notify('Lütfen değer giriniz!', 'error', 3, function(){  console.log('dismissed'); });
+      }
+      else{
+        this.denemeService.GetTasinmazById(Number(this.filtreleDeger)).subscribe(s => {
+          this.selectedIds = [];
+          
+          this.tasinmazlar = [s];
+          this.control();
+        },e=>{
+          alertify.notify('Böyle bir taşınmaz yok!', 'error', 3, function(){  console.log('dismissed'); });
+        });
+      }
+     
     }
     else if (this.filtreleSecili == "filtrele") {
-      return null;
+      alertify.notify('Lütfen filtre seçiniz!', 'error', 3, function(){  console.log('dismissed'); });
     }
     else {
-      this.denemeService.GetTasinmazByString(this.filtreleSecili, this.filtreleDeger).subscribe(s => {
-        this.tasinmazlar = s; this.control();
-      })
+      if(this.filtreleDeger==null){
+        alertify.notify('Lütfen değer giriniz!', 'error', 3, function(){  console.log('dismissed'); });
+      }
+      else{
+        this.denemeService.GetTasinmazByString(this.filtreleSecili, this.filtreleDeger).subscribe(s => {
+          this.selectedIds = [];
+          const selectAllCheckbox = <HTMLInputElement>document.getElementById('selectAll');
+          selectAllCheckbox.checked = false;
+          this.tasinmazlar = s; this.control();
+
+        });
+      }
+      
     }
   }
 }

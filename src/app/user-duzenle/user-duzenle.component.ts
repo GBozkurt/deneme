@@ -86,10 +86,9 @@ export class UserDuzenleComponent implements OnInit {
       if (secim){
         const formData = this.myForm.value;
         this.deger = new registerUser(formData.name,formData.username,formData.password,formData.rol);
-        console.log(this.deger);
         this.userService.PutUpdateUser(this.deger,this.id).subscribe(s=>{
           const id = this.userService.getCurrentUser(); 
-          const islem = "User-Update";
+          const islem = "K-Güncelle";
           const aciklama = "Update işlemi yapılmıştır. Eski Kullanıcı: "+ JSON.stringify(this.deger);
           const durum = "Başarılı!";
           
@@ -100,7 +99,7 @@ export class UserDuzenleComponent implements OnInit {
             this.userService.router.navigate(['/admin']);
             alertify.notify('Düzenleme Başarılı!', 'success', 3, function(){  console.log('dismissed'); });
         });
-        })
+        });
       }
     }
     else{

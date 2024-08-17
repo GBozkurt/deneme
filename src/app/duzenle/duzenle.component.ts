@@ -49,7 +49,7 @@ export class DuzenleComponent implements OnInit {
     }
   }
 
-  //İL DEĞİŞİNCE İLİ ÇAĞIR
+  //İL DEĞİŞİNCE İLÇEYİ ÇAĞIR
   onIlChange() {
     if (this.selectedIlId) {
       this.getIlceByIl(this.selectedIlId);
@@ -121,7 +121,7 @@ export class DuzenleComponent implements OnInit {
       this.denemeService.PutUpdateTasinmaz(id, tasinmaz).subscribe(s => {
 
         const id = this.userService.getCurrentUser();
-        const islem = "Taşınmaz Güncelleme";
+        const islem = "T-Güncelleme";
         const aciklama = "Taşınmaz güncelleme işlemi yapılmıştır. Eski Taşınmaz: " + JSON.stringify(this.deger);
         const durum = "Başarılı!";
         
@@ -134,8 +134,8 @@ export class DuzenleComponent implements OnInit {
         });
       }, e => {
         const id = this.userService.getCurrentUser();
-        const islem = "Taşınmaz Güncelleme";
-        const aciklama = "Taşınmaz güncelleme işlemi yapılamamıştır: " + e;
+        const islem = "T-Güncelleme";
+        const aciklama = "Taşınmaz Güncelleme işlemi yapılamamıştır: " + e;
         const durum = "Başarısız!";
         
         this.userService.getUserIp().subscribe((data: string) => {

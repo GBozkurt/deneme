@@ -73,8 +73,8 @@ export class MapComponent implements OnInit, AfterViewInit {
       target: 'map',
       layers: [this.osmLayer, this.googleLayer, vectorLayer],
       view: new View({
-        center: fromLonLat([34.97645837438064, 38.09153950738204]),
-        zoom: 6.5
+        center: fromLonLat([35.30879837922065, 39.15019523779637]),
+        zoom: 6
       }),
       controls: [
         new ScaleLine()
